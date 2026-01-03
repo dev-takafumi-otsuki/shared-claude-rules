@@ -2,6 +2,40 @@
 
 タスクの規模に応じて、以下の2つのプロセスパターンを使い分けてください。
 
+---
+
+## ブランチ運用ルール
+
+### クラウド環境（claude.ai/code）での作業
+
+クラウド環境で作業を開始する際は、必ず **develop ブランチから作業ブランチを作成** してください。
+
+```bash
+# 1. developブランチに切り替え
+git checkout develop
+
+# 2. 最新を取得
+git pull origin develop
+
+# 3. 作業ブランチを作成
+git checkout -b feature/your-feature-name
+```
+
+### ブランチ命名規則
+
+| 種別 | プレフィックス | 例 |
+|------|----------------|-----|
+| 新機能 | `feature/` | `feature/user-auth` |
+| バグ修正 | `fix/` | `fix/login-error` |
+| リファクタリング | `refactor/` | `refactor/api-client` |
+| ドキュメント | `docs/` | `docs/api-spec` |
+| 設定変更 | `chore/` | `chore/update-deps` |
+
+### PR作成時のベースブランチ
+
+- **ベースブランチ**: `develop`（必須）
+- mainへの直接マージは禁止
+
 ## プロセス判定基準
 
 | 判定項目 | 大規模改修 | 小規模改修/バグ改修 |
