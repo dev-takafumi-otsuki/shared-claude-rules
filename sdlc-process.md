@@ -36,6 +36,44 @@ git checkout -b feature/your-feature-name
 - **ベースブランチ**: `develop`（必須）
 - mainへの直接マージは禁止
 
+### クラウド環境での品質確認
+
+クラウド環境では `node_modules` がインストールされていないため、セッション開始時に依存関係をインストールしてください。
+
+#### セッション開始時（必須）
+
+```bash
+# フロントエンド依存関係のインストール
+cd apps/frontend && npm ci
+
+# バックエンド依存関係のインストール（必要に応じて）
+cd apps/backend-sam && pip install -r requirements.txt -t .
+```
+
+#### 実装完了後の品質チェック
+
+```bash
+# フロントエンド
+cd apps/frontend
+npm run lint          # ESLint
+npm run type-check    # TypeScript型チェック（設定されている場合）
+npm test -- --watchAll=false  # ユニットテスト
+npm run build         # ビルド確認
+
+# バックエンド
+cd apps/backend-sam
+python -m py_compile [変更したファイル]  # 構文チェック
+./scripts/run_all_tests.sh               # ユニットテスト
+```
+
+#### 注意事項
+
+- `npm ci` は `npm install` より高速で、`package-lock.json` に基づいて厳密にインストールされる
+- 依存関係のインストールは一度実行すれば、セッション中は有効
+- PR作成後、GitHub Actions でも品質チェックが実行される
+
+---
+
 ## プロセス判定基準
 
 | 判定項目 | 大規模改修 | 小規模改修/バグ改修 |
